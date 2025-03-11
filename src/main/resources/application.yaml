@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: scholarsearch
+  docker:
+    compose:
+      enabled: false
