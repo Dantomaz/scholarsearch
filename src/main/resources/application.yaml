@@ -1,6 +1,10 @@
 spring:
   application:
     name: scholarsearch
+  mvc:
+    # noinspection SpellCheckingInspection
+    problemdetails:
+      enabled: true
   docker:
     compose:
       enabled: false
