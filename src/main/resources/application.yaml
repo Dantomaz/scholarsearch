@@ -1,6 +1,8 @@
 spring:
   application:
     name: scholarsearch
+  profiles:
+    active: ${spring.active_profile}
   mvc:
     # noinspection SpellCheckingInspection
     problemdetails:
@@ -8,3 +10,8 @@ spring:
   docker:
     compose:
       enabled: false
+custom:
+  semantic-scholar:
+    paper:
+      relevance-search-url: ${semantic_scholar.paper.relevance_search_url}
+      details-search-url: ${semantic_scholar.paper.details_search_url}
