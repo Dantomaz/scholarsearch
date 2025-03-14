@@ -23,6 +23,10 @@ public class PaperSearchController {
 
     @GetMapping("/search")
     public String getPapersByRelevance(@RequestParam("query") String query, @RequestParam("page") int page, Model model) {
+        if (query == null || query.isBlank()) {
+            return "redirect:/";
+        }
+
         PaperRelevanceResponse response = paperSearchService.getPapersByRelevance(query, page);
 
         model.addAttribute("currentPage", response.offset() / RESULTS_LIMIT_PER_PAGE + 1);
