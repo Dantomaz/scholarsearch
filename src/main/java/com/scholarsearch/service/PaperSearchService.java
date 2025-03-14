@@ -1,5 +1,6 @@
 package com.scholarsearch.service;
 
+import com.scholarsearch.exception.RelevanceSearchLimitException;
 import com.scholarsearch.model.Paper;
 import com.scholarsearch.model.PaperRelevanceResponse;
 import lombok.Data;
@@ -27,6 +28,11 @@ public class PaperSearchService {
 
     public PaperRelevanceResponse getPapersByRelevance(String query, int page) {
         int offset = (page - 1) * RESULTS_LIMIT_PER_PAGE;
+
+        if (offset >= RESULT_LIMIT_FOR_API) {
+            throw new RelevanceSearchLimitException("Relevance search offset must be < %s. With %s results per page, the current limit is page nr %s"
+                .formatted(RESULT_LIMIT_FOR_API, RESULTS_LIMIT_PER_PAGE, RESULT_LIMIT_FOR_API / RESULTS_LIMIT_PER_PAGE));
+        }
 
         String[] RELEVANCE_FIELDS = new String[]{
             "title",
