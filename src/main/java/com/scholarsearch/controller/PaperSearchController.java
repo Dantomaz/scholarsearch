@@ -1,33 +1,41 @@
 package com.scholarsearch.controller;
 
+import com.scholarsearch.model.Paper;
+import com.scholarsearch.model.PaperRelevanceResponse;
 import com.scholarsearch.service.PaperSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import static com.scholarsearch.service.PaperSearchService.RESULTS_LIMIT_PER_PAGE;
+import static com.scholarsearch.service.PaperSearchService.RESULT_LIMIT_FOR_API;
 
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/paper")
+@Controller
+@RequestMapping("/papers")
 public class PaperSearchController {
 
     private final PaperSearchService paperSearchService;
 
     @GetMapping("/search")
-    public ResponseEntity<String> getPapersByRelevance(
-        @RequestParam("query") String query,
-        @RequestParam(value = "offset", defaultValue = "0") int offset
-    ) {
-        String response = paperSearchService.getPapersByRelevance(query, offset);
-        return ResponseEntity.ok(response);
+    public String getPapersByRelevance(@RequestParam("query") String query, @RequestParam("page") int page, Model model) {
+        PaperRelevanceResponse response = paperSearchService.getPapersByRelevance(query, page);
+
+        model.addAttribute("currentPage", response.offset() / RESULTS_LIMIT_PER_PAGE + 1);
+        model.addAttribute("totalPages", RESULT_LIMIT_FOR_API / RESULTS_LIMIT_PER_PAGE);
+        model.addAttribute("papers", response.papers());
+
+        return "papers";
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getPaperDetails(@PathVariable("id") String id) {
-        String response = paperSearchService.getPaperDetails(id);
-        return ResponseEntity.ok(response);
+    public String getPaperDetails(@PathVariable("id") String id, Model model) {
+        Paper paperDetails = paperSearchService.getPaperDetails(id);
+        model.addAttribute("paperDetails", paperDetails);
+        return "papers";
     }
 }
