@@ -13,10 +13,9 @@
         <article class="p-4 mb-4 bg-gray-800 hover:bg-gray-700 cursor-pointer rounded-md break-inside-avoid flex flex-col gap-2"
                  onclick="toggleDetails(this)" th:each="paper : ${papers}">
 
-            <header class="flex flex-col gap-2">
-                <p th:if="${paper.fieldsOfStudy}">
-                    #<span class="text-neutral-200 text-sm ml-1" th:text="${#strings.arrayJoin(paper.fieldsOfStudy, ', ')}"></span>
-                </p>
+            <header class="flex flex-col gap-4">
+                <span class="text-indigo-400 text-sm font-semibold" th:if="${paper.fieldsOfStudy}"
+                      th:text="'# ' + ${#strings.arrayJoin(paper.fieldsOfStudy, ', ')}"></span>
 
                 <h2 class="font-medium text-xl" th:text="${paper.title}"></h2>
             </header>
