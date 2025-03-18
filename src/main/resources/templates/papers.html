@@ -11,7 +11,7 @@
     <main class="w-[60vw] columns-3 gap-4">
         <!-- card -->
         <article class="p-4 mb-4 bg-gray-800 hover:bg-gray-700 cursor-pointer rounded-md break-inside-avoid flex flex-col gap-2"
-                 th:each="paper : ${papers}">
+                 onclick="toggleDetails(this)" th:each="paper : ${papers}">
 
             <header class="flex flex-col gap-2">
                 <p th:if="${paper.fieldsOfStudy}">
@@ -23,9 +23,13 @@
 
             <p class="text-neutral-200 text-justify" th:if="${paper.tldr?.text}" th:text="${paper.tldr.text}"></p>
 
-            <footer class="flex flex-row justify-between text-neutral-200 text-sm mt-4">
-                <span th:text="${#strings.arrayJoin(paper.publicationTypes, ', ')}"></span>
-                <span th:if="${paper.publicationDate}" th:text="${paper.publicationDate}"></span>
+            <footer class="flex flex-col gap-4 text-neutral-200 text-sm mt-4">
+                <div class="flex flex-row justify-between">
+                    <span th:text="${#strings.arrayJoin(paper.publicationTypes, ', ')}"></span>
+                    <span th:if="${paper.publicationDate}" th:text="${paper.publicationDate}"></span>
+                </div>
+                <a class="details hidden px-4 py-2 w-full border-2 border-transparent rounded-md text-center bg-indigo-600 hover:bg-indigo-700"
+                   th:href="@{|/papers/${paper.paperId}|}">Show details</a>
             </footer>
 
         </article>
@@ -70,5 +74,17 @@
         <a class="invisible px-4 py-2 min-w-fit border-2">Back to search</a>
     </div>
 </footer>
+
+<script>
+    function toggleDetails(article) {
+        document.querySelectorAll(".details").forEach(function(btn) {
+            btn.classList.add("hidden");
+        });
+        const details = article.querySelector(".details");
+        if (details) {
+            details.classList.toggle("hidden");
+        }
+    }
+</script>
 </body>
 </html>
