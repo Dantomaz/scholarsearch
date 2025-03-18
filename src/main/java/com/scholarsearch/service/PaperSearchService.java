@@ -51,6 +51,11 @@ public class PaperSearchService {
 
     public Paper getPaperDetails(String id) {
         String[] DETAILS_FIELDS = new String[]{
+            "title",
+            "fieldsOfStudy",
+            "publicationTypes",
+            "publicationDate",
+            "tldr",
             "url",
             "abstract",
             "referenceCount",

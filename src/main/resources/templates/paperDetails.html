@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Scholar Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="w-[100vw] h-[100vh] bg-gradient-to-b from-gray-950 to-gray-900 text-neutral-200 text-md flex flex-col justify-center items-center">
+<div class="pt-4 pb-[70px] w-full overflow-y-auto flex justify-center items-start"
+     th:style="'-ms-overflow-style: none; scrollbar-width: none;'">
+    <main class="w-[60vw]">
+        <article class="p-6 mb-4 bg-gray-800 rounded-lg shadow-md flex flex-col gap-4">
+
+            <header class="flex flex-col gap-8">
+                <span class="text-indigo-400 text-sm font-semibold" th:if="${paper.fieldsOfStudy}"
+                      th:text="'# ' + ${#strings.arrayJoin(paper.fieldsOfStudy, ', ')}"></span>
+
+                <h1 class="font-medium text-2xl text-white" th:text="${paper.title}"></h1>
+            </header>
+
+            <p class="text-neutral-200 text-justify" th:if="${paper.tldr?.text}" th:text="${paper.tldr.text}"></p>
+
+            <!-- abstract section -->
+            <section class="bg-gray-700 p-4 rounded-md flex flex-col gap-2" th:if="${paper.abstractText}">
+                <h2 class="text-lg font-semibold text-white mb-2">Abstract</h2>
+                <p class="text-neutral-200 text-justify" th:text="${paper.abstractText}"></p>
+            </section>
+
+            <!-- access section -->
+            <section class="bg-gray-700 p-4 rounded-md flex flex-col gap-2">
+                <h2 class="text-lg font-semibold text-white mb-2">Access</h2>
+
+                <div class="text-neutral-200" th:if="${paper.url}">
+                    Paper URL:
+                    <a class="text-indigo-400 hover:text-indigo-300 underline inline-flex items-baseline gap-1" target="_blank"
+                       th:href="${paper.url}">
+                        <svg class="inline self-center" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.5 10.5L21 3m-5 0h5v5m0 6v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" fill="none" stroke="currentColor"
+                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                        </svg>
+                        Link
+                    </a>
+                </div>
+
+                <div class="text-neutral-200" th:if="${paper.openAccessPdf}">
+                    PDF Status: <span class="font-semibold text-indigo-300" th:text="${paper.openAccessPdf.status}"></span>,
+                    Direct PDF:
+                    <a class="text-indigo-400 hover:text-indigo-300 underline inline-flex items-baseline gap-1" target="_blank"
+                       th:href="${paper.openAccessPdf.url}">
+                        <svg class="inline self-center" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.5 10.5L21 3m-5 0h5v5m0 6v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" fill="none" stroke="currentColor"
+                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                        </svg>
+                        PDF
+                    </a>
+                </div>
+            </section>
+
+            <!-- metrics section -->
+            <section class="bg-gray-700 p-4 rounded-md flex flex-col gap-2">
+                <h2 class="text-lg font-semibold text-white mb-2">Metrics</h2>
+                <p class="text-neutral-200" th:if="${paper.referenceCount}" th:text="'References: ' + ${paper.referenceCount}"></p>
+                <p class="text-neutral-200" th:if="${paper.citationCount}" th:text="'Citations: ' + ${paper.citationCount}"></p>
+            </section>
+
+            <!-- authors section -->
+            <section class="bg-gray-700 p-4 rounded-md flex flex-col gap-2" th:if="${paper.authors}">
+                <h2 class="text-lg font-semibold text-white mb-2">Authors</h2>
+                <ul class="list-disc list-inside text-neutral-300 space-y-2">
+                    <li class="flex items-baseline gap-4 flex-wrap" th:each="author : ${paper.authors}">
+                        <span class="text-neutral-200" th:text="${author.name}"></span>
+
+                        <span class="text-sm inline-flex items-baseline" th:if="${author.url}">
+                            <span class="text-neutral-400">Profile:</span>
+                            <a class="text-indigo-400 hover:text-indigo-300 underline inline-flex items-baseline gap-1 ml-1" target="_blank"
+                               th:href="${author.url}">
+                                <svg class="inline self-center" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.5 10.5L21 3m-5 0h5v5m0 6v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" fill="none"
+                                          stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                </svg>
+                                <span>Link</span>
+                            </a>
+                        </span>
+
+                        <span class="text-sm text-neutral-400" th:if="${author.affiliations}"
+                              th:text="'Affiliations: ' + ${#strings.arrayJoin(author.affiliations, ', ')}"></span>
+
+                        <span class="text-sm inline-flex items-baseline" th:if="${author.homepage}">
+                            <span class="text-neutral-400">Homepage:</span>
+                            <a class="text-indigo-400 hover:text-indigo-300 underline inline-flex items-baseline gap-1 ml-1" target="_blank"
+                               th:href="${author.homepage}">
+                                <svg class="inline self-center" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.5 10.5L21 3m-5 0h5v5m0 6v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" fill="none"
+                                          stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                                </svg>
+                                <span>Link</span>
+                            </a>
+                        </span>
+
+                        <span class="text-sm text-neutral-400" th:if="${author.paperCount}" th:text="'Papers: ' + ${author.paperCount}"></span>
+
+                        <span class="text-sm text-neutral-400" th:if="${author.citationCount}"
+                              th:text="'Citations: ' + ${author.citationCount}"></span>
+
+                        <span class="text-sm text-neutral-400" th:if="${author.hIndex}" th:text="'h-Index: ' + ${author.hIndex}"></span>
+                    </li>
+                </ul>
+            </section>
+
+            <footer>
+                <div class="flex flex-row justify-between text-neutral-200 text-md mt-4">
+                    <span th:text="${#strings.arrayJoin(paper.publicationTypes, ', ')}"></span>
+                    <span th:if="${paper.publicationDate}" th:text="${paper.publicationDate}"></span>
+                </div>
+            </footer>
+        </article>
+    </main>
+</div>
+<footer class="w-full h-[60px] fixed bottom-0 left-0 bg-gray-900 flex justify-center">
+    <div class="w-[60vw] flex justify-between items-center">
+        <a class="px-4 py-2 min-w-fit rounded-md text-center border-2 border-indigo-600 bg-transparent hover:bg-indigo-600 cursor-pointer text-white font-medium"
+           onclick="history.go(-1)">Back</a>
+        <a class="invisible px-4 py-2 min-w-fit border-2">Back</a>
+    </div>
+</footer>
+</body>
+</html>

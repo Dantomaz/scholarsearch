@@ -38,8 +38,8 @@ public class PaperSearchController {
 
     @GetMapping("/{id}")
     public String getPaperDetails(@PathVariable("id") String id, Model model) {
-        Paper paperDetails = paperSearchService.getPaperDetails(id);
-        model.addAttribute("paperDetails", paperDetails);
-        return "papers";
+        Paper paper = paperSearchService.getPaperDetails(id);
+        model.addAttribute("paper", paper);
+        return "paperDetails";
     }
 }
